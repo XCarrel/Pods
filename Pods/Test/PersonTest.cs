@@ -19,5 +19,14 @@ namespace Test
             person.Name = "JOE";
             Assert.AreEqual(person.Name, "Joe");
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void TestMaxOccupancy()
+        {
+            Pod p = new Pod(1, 10);
+            p.addTraveller(new Person("Joe"));
+            p.addTraveller(new Person("Jack"));
+        }
     }
 }
