@@ -62,6 +62,7 @@ namespace Pods
                 {
                     pod.Speed = World.alea.Next(100, 300);
                     source.GetAnExitRoad().AllowEnter(pod);
+                    Console.WriteLine($"Pod {pod.Id} leaves {source.Name}");
                 }
             }
         }

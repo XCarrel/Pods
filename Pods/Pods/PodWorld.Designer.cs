@@ -36,7 +36,7 @@
             // tmrLife
             // 
             this.tmrLife.Enabled = true;
-            this.tmrLife.Interval = 20;
+            this.tmrLife.Interval = 10;
             this.tmrLife.Tick += new System.EventHandler(this.tmrLife_Tick);
             // 
             // chkShowHubStats
@@ -57,7 +57,7 @@
             this.Controls.Add(this.chkShowHubStats);
             this.Name = "PodWorld";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PodWorld";
+            this.Text = "Podzerland";
             this.ResumeLayout(false);
             this.PerformLayout();
 
