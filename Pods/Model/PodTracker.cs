@@ -8,7 +8,6 @@ namespace Model
 {
     public class PodTracker
     {
-        private Pod pod;
         private double _completion;
 
         public PodTracker(Pod pod)
@@ -17,7 +16,7 @@ namespace Model
             Completion = 0;
         }
 
-        public Pod Pod { get => pod; set => pod = value; }
+        public Pod Pod { get; set; }
         public double Completion { get => _completion; set => _completion = value; }
     }
 }

@@ -22,29 +22,21 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Model
 {
-    public class World
+    public static class World
     {
         public static Random alea = new Random();
 
-        private List<Person> _population;
-        private List<Hub> _hubs;
-        private List<Road> _roads;
-        private List<Pod> _fleet;
+        private static List<Person> _population = new List<Person>();
+        private static List<Hub> _hubs = new List<Hub>();
+        private static List<Road> _roads = new List<Road>();
+        private static List<Pod> _fleet = new List<Pod>();
 
-        public List<Person> Population { get => _population; set => _population = value; }
-        public List<Hub> Hubs { get => _hubs; set => _hubs = value; }
-        public List<Road> Roads { get => _roads; set => _roads = value; }
-        public List<Pod> Fleet { get => _fleet; set => _fleet = value; }
+        public static List<Person> Population { get => _population; set => _population = value; }
+        public static List<Hub> Hubs { get => _hubs; set => _hubs = value; }
+        public static List<Road> Roads { get => _roads; set => _roads = value; }
+        public static List<Pod> Fleet { get => _fleet; set => _fleet = value; }
 
-        public World()
-        {
-            _population = new List<Person>();
-            _hubs = new List<Hub>();
-            _roads = new List<Road>();
-            _fleet = new List<Pod>();
-        }
-
-        public void Init()
+        public static void Init()
         {
             _hubs = new List<Hub>
                  {
@@ -280,18 +272,6 @@ namespace Model
             for (int i = 0; i < _hubs.Count; i++)
                 for (int p = 0; p < 10; p++)
                     _hubs[i].AddPod(new Pod(Guid.NewGuid().ToString(), 2, 2));
-
-            // put Pods on roads
-            foreach (Road road in _roads)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    double percent = alea.NextDouble();
-                    Pod p = new Pod(Guid.NewGuid().ToString(), 2, 2);
-                    p.Speed = alea.Next(50, 100);
-                    road.AllowEnter(p);
-                }
-            }
 
         }
     }

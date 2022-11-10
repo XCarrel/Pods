@@ -18,6 +18,7 @@ namespace Model
 
         public string Name { get => _name; set => _name = value; }
         public Vector2 Position { get => _position; set => _position = value; }
+        public List<Pod> Parking { get => _parking; }
 
         public Hub(string name, Vector2 position)
         {
@@ -34,8 +35,32 @@ namespace Model
 
         public void AddPod(Pod pod)
         {
-            _parking.Add(pod);
+            Parking.Add(pod);
         }
 
+        /// <summary>
+        /// Extracts a random Pod from the parking lot
+        /// </summary>
+        /// <returns></returns>
+        public Pod CheckoutRandomPod()
+        {
+            Pod pod = Parking[World.alea.Next(Parking.Count)];
+            _parking.Remove(pod);
+            return pod;
+        }
+
+        /// <summary>
+        /// Selects randomly a road that exits this hub
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public Road GetAnExitRoad()
+        {
+            List<Road> candidates = World.Roads.Where(r => r.From == this).ToList();
+            if (candidates.Count == 0)
+                throw new Exception($"Hub {Name} is a deadend");
+            else
+                return candidates[World.alea.Next(candidates.Count)];
+        }
     }
 }
