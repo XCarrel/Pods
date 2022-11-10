@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,30 +9,47 @@ namespace Model
 {
     public class Pod
     {
-        private string id;
-        private int passengerCapacity;
-        private int containerCapacity;
-        private List<Person> occupancy;
+        private string _id;
+        private int _passengerCapacity;
+        private int _containerCapacity;
+        private Vector2 _position;
+        private int _speed = 0;                 // km/h
+        private List<Person> _occupancy;
 
-        public Pod(int passengerCapacity, int containerCapacity)
+        public Pod(string id, int passengerCapacity, int containerCapacity)
         {
-            this.passengerCapacity = passengerCapacity;
-            this.containerCapacity = containerCapacity;
-            this.occupancy = new List<Person>();
+            this._id = id;
+            this._passengerCapacity = passengerCapacity;
+            this._containerCapacity = containerCapacity;
+            this._occupancy = new List<Person>();
         }
+
+        public Pod(string id, int passengerCapacity, int containerCapacity, Vector2 position) : this(id, passengerCapacity, containerCapacity)
+        {
+            Position = position;
+        }
+
+        public Pod(string id, int passengerCapacity, int containerCapacity, Vector2 position, int speed) : this(id, passengerCapacity, containerCapacity, position)
+        {
+            Speed = speed;
+        }
+
+        public int PassengerCapacity { get => _passengerCapacity; }
+        public int ContainerCapacity { get => _containerCapacity; }
+        public string Id { get => _id; }
+        public int Speed { get => _speed; set => _speed = value; }
+        public Vector2 Position { get => _position; set => _position = value; }
 
         public void addTraveller (Person traveller)
         {
-            if (occupancy.Count == this.passengerCapacity)
+            if (_occupancy.Count == this.PassengerCapacity)
             {
                 throw new Exception("Pod is full");
             } else
             {
-                occupancy.Add(traveller);
+                _occupancy.Add(traveller);
             }
         }
 
-        public int Occupancy
-            { get { return occupancy.Count; } }
     }
 }
