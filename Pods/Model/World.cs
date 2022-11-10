@@ -53,7 +53,24 @@ namespace Model
                  };
 
             // Build roads
-            string[] roadNames = {"A12","A21","A34","A41","A13","A35","A56","A63","A31","A67","A76","A78","A86"};
+            string[] roadNames = {
+                "A12 Lausanne-Genève",
+                "A21 Genève-Lausanne",
+                "A34 Bern-Sion",
+                "A14 Lausanne-Sion",
+                "A41 Sion-Lausanne",
+                "A13 Lausanne-Berne",
+                "A35 Berne-Zurich",
+                "A53 Zurich-Berne",
+                "A56 Zurich-Lucerne",
+                "A65 Lucerne-Zurich",
+                "A63 Lucerne-Berne",
+                "A31 Berne-Lausanne",
+                "A67 Lucerne-Coire",
+                "A76 Coire-Lucerne",
+                "A78 Coire-Lugano",
+                "A86 Lugano-Lucerne"
+            };
             _roads = new List<Road>();
             // Create roads based on name: second digit is the index of the starting hub, third of the ending one
             foreach (string roadName in roadNames)
@@ -264,6 +281,7 @@ namespace Model
                 "Beatrice Allington",
                 "Jacob Robertson"
              };
+            _population = new List<Person>();
             foreach (string person in people)
             {
                 _population.Add(new Person(person));
@@ -280,6 +298,37 @@ namespace Model
                 for (int p = 0; p < 50; p++)
                     _hubs[i].AddPod(new Pod(Guid.NewGuid().ToString(), 2, 2));
 
+        }
+
+        /// <summary>
+        /// Recursive method used to find a path from one hub to another
+        /// If there are multiple possibilities, this algorithm will only return the first it found
+        /// </summary>
+        /// <param name="From">The hub where we are</param>
+        /// <param name="To">The Hub where we want to go</param>
+        /// <param name="PassedThrough">A list of hubs through which the search has already passed - and must therefore no pass again (would create an endless loop)</param>
+        /// <returns>A List of roads to follow to get from start to finish</returns>
+        public static Itinerary FindItinerary(Hub From, Hub To, List<Hub> PassedThrough)
+        {
+            PassedThrough.Add(From);
+            Itinerary res = new Itinerary();
+            if (World.Roads.Where(r => r.From == From && r.To == To).Any()) // We are lucky: there a direct road between or hubs
+                res.Roads.Add(World.Roads.Where(r => r.From == From && r.To == To).First());
+            else
+                // Let's try all roads that leave from the 'From' hub
+                foreach (Road road in World.Roads.Where(r => r.From == From).ToList())
+                    if (!PassedThrough.Contains(road.To)) // The road does not take us to somewhere we have already been, it is thus worth exploring
+                    {
+                        // Assuming we take that road, let's see if there is an itinerary that goes from the end of that road to the final destination
+                        Itinerary restOfTheTrip = FindItinerary(road.To, To, PassedThrough); // !!!! Recursive call
+                        if (restOfTheTrip.Roads.Count > 0) // there is a path to the destination beyon that road !!!
+                        {
+                            res.Roads.Add(road);
+                            res.Roads.AddRange(restOfTheTrip.Roads);
+                            return res; // That road and the rest is the path to destination
+                        }
+                    }
+            return res;
         }
     }
 }
