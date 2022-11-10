@@ -51,22 +51,15 @@ namespace Model
                  new Hub ("Coire", new Vector2(5 * 260 + 50, HEIGHT - 5 * 70 - 50)),
                  new Hub ("Lugano", new Vector2(5 * 215 + 50, HEIGHT - 5 * 0 - 50)),
                  };
-            _roads = new List<Road>
-                 {
-                 new Road("A12",_hubs[0],_hubs[1]),
-                 new Road("A21",_hubs[1],_hubs[0]),
-                 new Road("A34",_hubs[2],_hubs[3]),
-                 new Road("A41",_hubs[3],_hubs[0]),
-                 new Road("A13",_hubs[0],_hubs[2]),
-                 new Road("A35",_hubs[2],_hubs[4]),
-                 new Road("A56",_hubs[4],_hubs[5]),
-                 new Road("A63",_hubs[5],_hubs[2]),
-                 new Road("A31",_hubs[2],_hubs[0]),
-                 new Road("A67",_hubs[5],_hubs[6]),
-                 new Road("A76",_hubs[6],_hubs[5]),
-                 new Road("A78",_hubs[6],_hubs[7]),
-                 new Road("A86",_hubs[7],_hubs[5])
-                 };
+
+            // Build roads
+            string[] roadNames = {"A12","A21","A34","A41","A13","A35","A56","A63","A31","A67","A76","A78","A86"};
+            _roads = new List<Road>();
+            // Create roads based on name: second digit is the index of the starting hub, third of the ending one
+            foreach (string roadName in roadNames)
+            {
+                Roads.Add(new Road(roadName, _hubs[(int)(roadName[1] - '0') - 1], _hubs[(int)(roadName[2] - '0') - 1]));
+            }
 
             // generate population
             string[] people = {
