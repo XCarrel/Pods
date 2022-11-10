@@ -8,6 +8,9 @@ namespace Pods
         // This example assumes the existence of a form called Form1.
         BufferedGraphicsContext currentContext;
         BufferedGraphics myBuffer;
+        Font drawFont = new Font("Arial", 10);
+        SolidBrush writingBrush = new SolidBrush(Color.Black);
+
         public PodWorld()
         {
             InitializeComponent();
@@ -65,6 +68,7 @@ namespace Pods
         private void Render()
         {
             myBuffer.Graphics.Clear(Color.AliceBlue);
+
             // draw roads
             Pen p = new Pen(new SolidBrush(Color.LightGray), 1);
             Pen p2 = new Pen(new SolidBrush(Color.Red), 3);
@@ -76,10 +80,13 @@ namespace Pods
             }
 
             p = new Pen(new SolidBrush(Color.Blue), 8);
+
             // Draw hubs
             foreach (Hub hub in World.Hubs)
             {
                 myBuffer.Graphics.DrawEllipse(p, new Rectangle((int)hub.Position.X - Hub.DIAMETER / 2, (int)hub.Position.Y - Hub.DIAMETER / 2, Hub.DIAMETER, Hub.DIAMETER));
+                if (chkShowHubStats.Checked)
+                    myBuffer.Graphics.DrawString($"{hub.Name}\n{hub.Parking.Count} Pods", drawFont, writingBrush, hub.Position.X + Hub.DIAMETER, hub.Position.Y - Hub.DIAMETER);
             }
             myBuffer.Render();
         }
