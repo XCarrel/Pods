@@ -25,6 +25,8 @@ namespace Model
     public static class World
     {
         public static Random alea = new Random();
+        public static readonly int WIDTH = 1500;
+        public static readonly int HEIGHT = 800;
 
         private static List<Person> _population = new List<Person>();
         private static List<Hub> _hubs = new List<Hub>();
@@ -40,19 +42,30 @@ namespace Model
         {
             _hubs = new List<Hub>
                  {
-                 new Hub ("Lausanne", new Vector2(250,600)),
-                 new Hub ("Genève", new Vector2(120, 700)),
-                 new Hub ("Berne", new Vector2(350, 200)),
-                 new Hub ("Sion", new Vector2(800,500))
+                 new Hub ("Lausanne", new Vector2(5 * 35 + 50, HEIGHT - 5 * 35 - 50)),
+                 new Hub ("Genève", new Vector2(5 * 0 + 50, HEIGHT -5 * 0 - 50)),
+                 new Hub ("Berne", new Vector2(5 * 100 + 50, HEIGHT - 5 * 80 - 50)),
+                 new Hub ("Sion", new Vector2(5 * 90 + 50, HEIGHT - 5 * 0 - 50)),
+                 new Hub ("Zurich", new Vector2(5 * 180 + 50, HEIGHT - 5 * 130 - 50)),
+                 new Hub ("Lucerne", new Vector2(5 * 160 + 50, HEIGHT - 5 * 90 - 50)),
+                 new Hub ("Coire", new Vector2(5 * 260 + 50, HEIGHT - 5 * 70 - 50)),
+                 new Hub ("Lugano", new Vector2(5 * 215 + 50, HEIGHT - 5 * 0 - 50)),
                  };
             _roads = new List<Road>
                  {
                  new Road("A12",_hubs[0],_hubs[1]),
-                 new Road("A23",_hubs[1],_hubs[2]),
+                 new Road("A21",_hubs[1],_hubs[0]),
                  new Road("A34",_hubs[2],_hubs[3]),
                  new Road("A41",_hubs[3],_hubs[0]),
                  new Road("A13",_hubs[0],_hubs[2]),
-                 new Road("A31",_hubs[2],_hubs[0])
+                 new Road("A35",_hubs[2],_hubs[4]),
+                 new Road("A56",_hubs[4],_hubs[5]),
+                 new Road("A63",_hubs[5],_hubs[2]),
+                 new Road("A31",_hubs[2],_hubs[0]),
+                 new Road("A67",_hubs[5],_hubs[6]),
+                 new Road("A76",_hubs[6],_hubs[5]),
+                 new Road("A78",_hubs[6],_hubs[7]),
+                 new Road("A86",_hubs[7],_hubs[5])
                  };
 
             // generate population
@@ -264,13 +277,14 @@ namespace Model
             }
 
             // put people in hubs
+            int peopleByHub = _population.Count / _hubs.Count;
             for (int i = 0; i < _hubs.Count; i++)
-                for (int p = 0; p < 50; p++)
-                    _hubs[i].AddPerson(_population[50 * i + p]);
+                for (int p = 0; p < peopleByHub; p++)
+                    _hubs[i].AddPerson(_population[peopleByHub * i + p]);
 
             // Fill hubs' parkings
             for (int i = 0; i < _hubs.Count; i++)
-                for (int p = 0; p < 10; p++)
+                for (int p = 0; p < 50; p++)
                     _hubs[i].AddPod(new Pod(Guid.NewGuid().ToString(), 2, 2));
 
         }

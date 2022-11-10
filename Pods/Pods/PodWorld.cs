@@ -57,7 +57,7 @@ namespace Pods
                 Pod pod = source.CheckoutRandomPod();
                 if (pod != null)
                 {
-                    pod.Speed = World.alea.Next(100, 200);
+                    pod.Speed = World.alea.Next(100, 300);
                     source.GetAnExitRoad().AllowEnter(pod);
                 }
             }
