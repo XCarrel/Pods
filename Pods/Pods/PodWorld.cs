@@ -48,8 +48,11 @@ namespace Pods
             {
                 Hub source = World.Hubs[World.alea.Next(World.Hubs.Count)];
                 Pod pod = source.CheckoutRandomPod();
-                pod.Speed = World.alea.Next(100, 200);
-                source.GetAnExitRoad().AllowEnter(pod);
+                if (pod != null)
+                {
+                    pod.Speed = World.alea.Next(100, 200);
+                    source.GetAnExitRoad().AllowEnter(pod);
+                }
             }
         }
         private void Render()

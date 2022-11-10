@@ -42,8 +42,9 @@ namespace Model
         /// Extracts a random Pod from the parking lot
         /// </summary>
         /// <returns></returns>
-        public Pod CheckoutRandomPod()
+        public Pod? CheckoutRandomPod()
         {
+            if (Parking.Count == 0) return null;
             Pod pod = Parking[World.alea.Next(Parking.Count)];
             _parking.Remove(pod);
             return pod;
