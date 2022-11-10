@@ -31,8 +31,8 @@ namespace Pods
                     double distance = tracker.Pod.Speed * dt;
                     tracker.Completion += distance / road.Length();
                     Vector2 newPos = new Vector2 (
-                        (int)(road.From.Position.X + tracker.Completion * (road.To.Position.X - road.From.Position.X)), 
-                        (int)(road.From.Position.Y + tracker.Completion * (road.To.Position.Y - road.From.Position.Y))
+                        (int)(road.Entry().X + tracker.Completion * (road.Exit().X - road.Entry().X)), 
+                        (int)(road.Entry().Y + tracker.Completion * (road.Exit().Y - road.Entry().Y))
                     );
                     tracker.Pod.Position=newPos;
                 }
@@ -41,11 +41,10 @@ namespace Pods
         {
             graphics.Clear(Color.AliceBlue);
             Pen p = new Pen(new SolidBrush(Color.Blue), 3);
-            Rectangle r = new Rectangle(120, 60, 180, 180);
             // Draw hubs
             foreach (Hub hub in world.Hubs)
             {
-                graphics.DrawEllipse(p, new Rectangle((int)hub.Position.X - 10, (int)hub.Position.Y - 10, 20, 20));
+                graphics.DrawEllipse(p, new Rectangle((int)hub.Position.X - Hub.DIAMETER/2, (int)hub.Position.Y - Hub.DIAMETER/2, Hub.DIAMETER, Hub.DIAMETER));
             }
 
             // draw roads
@@ -53,7 +52,7 @@ namespace Pods
             Pen p2 = new Pen(new SolidBrush(Color.Red), 3);
             foreach (Road road in world.Roads)
             {
-                graphics.DrawLine(p, road.From.Position.X, road.From.Position.Y, road.To.Position.X, road.To.Position.Y);
+                graphics.DrawLine(p, road.Entry().X, road.Entry().Y, road.Exit().X, road.Exit().Y);
                 foreach (PodTracker pod in road.Pods)
                     graphics.DrawEllipse(p2, new Rectangle((int)pod.Pod.Position.X - 4, (int)pod.Pod.Position.Y - 2, 4, 4));
             }

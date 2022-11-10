@@ -46,5 +46,25 @@ namespace Model
             return v;
         }
 
+        /// <summary>
+        /// The exact coordinates of the road entry point
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 Entry()
+        {
+            Vector2 res = new Vector2(From.Position.X + Hub.DIAMETER/2 * PerpendicularDirection().X, From.Position.Y + Hub.DIAMETER/2 * PerpendicularDirection().Y);
+            return res;
+        }
+
+        /// <summary>
+        /// The exact coordinates of the road exit point
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 Exit()
+        {
+            Vector2 res = new Vector2(To.Position.X + Hub.DIAMETER / 2 * PerpendicularDirection().X, To.Position.Y + Hub.DIAMETER / 2 * PerpendicularDirection().Y);
+            return res;
+        }
+
     }
 }

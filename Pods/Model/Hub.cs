@@ -9,6 +9,8 @@ namespace Model
 {
     public class Hub
     {
+        static public readonly int DIAMETER = 20;
+
         private string _name;
         private Vector2 _position;
         private List<Person> _occupancy;
