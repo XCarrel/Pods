@@ -51,5 +51,13 @@ namespace Model
             }
         }
 
+        public void Move (float dt, float roadDx, float roadDy)
+        {
+            float distance = Speed * dt;
+            float fractionCovered = distance / (float)Math.Sqrt(Math.Pow(roadDx,2)+Math.Pow(roadDy,2));
+            _position.X += roadDx * fractionCovered;
+            _position.Y += roadDy * fractionCovered;
+        }
+
     }
 }

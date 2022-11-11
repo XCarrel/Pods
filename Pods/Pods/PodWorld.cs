@@ -5,6 +5,9 @@ namespace Pods
 {
     public partial class PodWorld : Form
     {
+        // how much faster than real life is our simulation running ?
+        const float SIMULATION_ACCELERATION_FACTOR = 100.0f;
+
         // This example assumes the existence of a form called Form1.
         BufferedGraphicsContext currentContext;
         BufferedGraphics myBuffer;
@@ -31,28 +34,14 @@ namespace Pods
 
         private void UpdateModel()
         {
+            // number of hours elapsed since last update
+            float simultime = (float)(tmrLife.Interval / 1000.0 / 60.0 / 60.0);
             // move Pods on roads
             foreach (Road road in World.Roads)
-                foreach (PodTracker tracker in road.Pods)
-                {
-                    double dt = 10.0 / 3600; // simulated time: 1min simu = 1h real time
-                    double distance = tracker.Pod.Speed * dt;
-                    tracker.Completion += distance / road.Length();
-                    Vector2 newPos = new Vector2(
-                        (int)(road.Entry().X + tracker.Completion * (road.Exit().X - road.Entry().X)),
-                        (int)(road.Entry().Y + tracker.Completion * (road.Exit().Y - road.Entry().Y))
-                    );
-                    tracker.Pod.Position = newPos;
-                }
+            {
+                road.MovePods(simultime * SIMULATION_ACCELERATION_FACTOR);
+            }
 
-            // Manage road exits
-            foreach (Road road in World.Roads)
-                foreach (PodTracker tracker in road.Pods.ToList())
-                    if (tracker.Completion >= 1.0)
-                    {
-                        road.To.AddPod(tracker.Pod); // park the pod at its destination
-                        road.Pods.Remove(tracker);
-                    }
             // Put a Pod in motion
             if (World.alea.Next(30) == 0)
             {
@@ -76,8 +65,8 @@ namespace Pods
             foreach (Road road in World.Roads)
             {
                 myBuffer.Graphics.DrawLine(p, road.Entry().X, road.Entry().Y, road.Exit().X, road.Exit().Y);
-                foreach (PodTracker pod in road.Pods)
-                    myBuffer.Graphics.DrawEllipse(p2, new Rectangle((int)pod.Pod.Position.X - 4, (int)pod.Pod.Position.Y - 2, 4, 4));
+                foreach (Pod pod in road.Pods)
+                    myBuffer.Graphics.DrawEllipse(p2, new Rectangle((int)pod.Position.X - 4, (int)pod.Position.Y - 2, 4, 4));
             }
 
             p = new Pen(new SolidBrush(Color.Blue), 8);

@@ -36,7 +36,6 @@
             // tmrLife
             // 
             this.tmrLife.Enabled = true;
-            this.tmrLife.Interval = 10;
             this.tmrLife.Tick += new System.EventHandler(this.tmrLife_Tick);
             // 
             // chkShowHubStats
