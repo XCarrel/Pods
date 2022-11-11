@@ -24,6 +24,7 @@ namespace Pods
             // dimensions the same size as the drawing surface of Form1.
             myBuffer = currentContext.Allocate(this.CreateGraphics(),
                this.DisplayRectangle);
+            numSpeedFactor.Value = (int)SIMULATION_ACCELERATION_FACTOR;
         }
 
         private void tmrLife_Tick(object sender, EventArgs e)
@@ -39,7 +40,7 @@ namespace Pods
             // move Pods on roads
             foreach (Road road in World.Roads)
             {
-                road.MovePods(simultime * SIMULATION_ACCELERATION_FACTOR);
+                road.MovePods(simultime * (float)numSpeedFactor.Value);
             }
 
             // Put a Pod in motion
