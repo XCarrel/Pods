@@ -13,6 +13,7 @@ namespace Model
     public class Truck : Pod
     {
         public static readonly int[] ALLOWED_CAPACITIES = { 2, 4, 8, 16 };
+        public static readonly int MAX_LOAD = 2000;
 
         List<Container> _containers;
 
@@ -33,5 +34,20 @@ namespace Model
         }
 
         public List<Container> Containers { get => _containers; }
+
+        public void AddContainer(Container container)
+        {
+            if (TotalLoad + container.LoadWeight > MAX_LOAD) throw new Exception($"Truck overload");
+            _containers.Add(container);
+        }
+
+        public int TotalLoad {
+            get {
+                int total = 0;
+                foreach (Container container in _containers)
+                    total += container.LoadWeight;
+                return total;
+            }
+        }
     }
 }

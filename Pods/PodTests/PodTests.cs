@@ -62,7 +62,34 @@ namespace PodTests
 
         [TestMethod]
         public void TruckLoadTest()
-        { }
+        {
+            // Arrange
+            Truck truck = new Truck("xxx", 4);
+            Container container1 = new Container("xxx");
+            container1.LoadWeight = 1000; // 1Ton
+            Container container2 = new Container("xxx");
+            container2.LoadWeight = 800;
+            Container container3 = new Container("xxx");
+            container3.LoadWeight = 500;
+
+            // Act: load the truck with decent weight
+            truck.AddContainer(container2);
+            truck.AddContainer(container3);
+            // Assert
+            Assert.AreEqual(1300,truck.TotalLoad);
+
+            // Act: overcome the limit
+            bool noBadLoad = true;
+            try
+            {
+                truck.AddContainer(container1);
+                noBadLoad = false;
+            } catch(Exception e)
+            {
+                // OK
+            }
+            Assert.IsTrue(noBadLoad);
+        }
 
         [TestMethod]
         public void DriverLicenseTest()
