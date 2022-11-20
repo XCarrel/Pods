@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Model
     public class Taxi : Pod
     {
         public static readonly int[] ALLOWED_CAPACITIES = { 1, 2, 3, 5, 8, 13, 21 };
+        public static readonly int MAX_OCCUPANCY_WITHOUT_LICENSE = 5;
 
         List<Person> _travellers;
 
@@ -44,6 +46,15 @@ namespace Model
             {
                 _travellers.Add(traveller);
             }
+        }
+
+        public bool canTravel()
+        {
+            if (_travellers.Count <= MAX_OCCUPANCY_WITHOUT_LICENSE) return true;
+            foreach (Person traveller in _travellers)
+                if (traveller.PodLicense)
+                    return true;
+            return false;
         }
 
     }

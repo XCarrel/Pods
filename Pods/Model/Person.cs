@@ -33,6 +33,12 @@ namespace Model
             _face = GetStringSha256Hash(name);
         }
 
+        public Person(string name, string face, bool podLicense) : this(name)
+        {
+            _face = face;
+            _podLicense = podLicense;
+        }
+
         public string Name { get => _name; set => _name = Capitalize(value); }
         public string Face { get => _face; set => _face = value; }
         public bool PodLicense { get => _podLicense; set => _podLicense = value; }

@@ -93,7 +93,34 @@ namespace PodTests
 
         [TestMethod]
         public void DriverLicenseTest()
-        { }
+        {
+            //Arrange
+            Person personLicense = new Person("Lucky", "xxxx", true);
+            Person person1 = new Person("Joe", "xxxx", false);
+            Person person2 = new Person("Jack", "xxxx", false);
+            Person person3 = new Person("William", "xxxx", false);
+            Person person4 = new Person("Averell", "xxxx", false);
+            Person person5 = new Person("Rantanplan", "xxxx", false);
+            Person person6 = new Person("Jolly", "xxxx", false);
+
+            Taxi taxi = new Taxi("xxx",21);
+
+            taxi.addTraveller(person1);
+
+            Assert.IsTrue(taxi.canTravel());
+
+            taxi.addTraveller(person2);
+            taxi.addTraveller(person3);
+            taxi.addTraveller(person4);
+            taxi.addTraveller(person5);
+            taxi.addTraveller(person6); // There are now 6 passengers without license
+
+            Assert.IsFalse(taxi.canTravel());
+
+            taxi.addTraveller(personLicense);
+
+            Assert.IsTrue(taxi.canTravel());
+        }
 
 
     }
