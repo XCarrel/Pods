@@ -7,49 +7,33 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class Pod
+    public abstract class Pod
     {
         private string _id;
-        private int _passengerCapacity;
-        private int _containerCapacity;
+        private int _capacity;
         private Vector2 _position;
         private int _speed = 0;                 // km/h
-        private List<Person> _occupancy;
 
-        public Pod(string id, int passengerCapacity, int containerCapacity)
+        public Pod(string id, int capacity)
         {
             this._id = id;
-            this._passengerCapacity = passengerCapacity;
-            this._containerCapacity = containerCapacity;
-            this._occupancy = new List<Person>();
+            this._capacity = capacity;
         }
 
-        public Pod(string id, int passengerCapacity, int containerCapacity, Vector2 position) : this(id, passengerCapacity, containerCapacity)
+        public Pod(string id, int capacity, Vector2 position) : this(id, capacity)
         {
             Position = position;
         }
 
-        public Pod(string id, int passengerCapacity, int containerCapacity, Vector2 position, int speed) : this(id, passengerCapacity, containerCapacity, position)
+        public Pod(string id, int capacity, Vector2 position, int speed) : this(id, capacity, position)
         {
             Speed = speed;
         }
 
-        public int PassengerCapacity { get => _passengerCapacity; }
-        public int ContainerCapacity { get => _containerCapacity; }
         public string Id { get => _id; }
-        public int Speed { get => _speed; set => _speed = value; }
+        public int Capacity { get => _capacity; }
         public Vector2 Position { get => _position; set => _position = value; }
-
-        public void addTraveller (Person traveller)
-        {
-            if (_occupancy.Count == this.PassengerCapacity)
-            {
-                throw new Exception("Pod is full");
-            } else
-            {
-                _occupancy.Add(traveller);
-            }
-        }
+        public int Speed { get => _speed; set => _speed = value; }
 
         public void Move (float dt, float roadDx, float roadDy)
         {

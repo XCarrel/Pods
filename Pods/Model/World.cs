@@ -297,9 +297,9 @@ namespace Model
             for (int i = 0; i < _hubs.Count; i++)
                 for (int p = 0; p < 50; p++)
                 {
-                    Pod newPod = new Pod(Guid.NewGuid().ToString(), 2, 2);
-                    _hubs[i].AddPod(new Pod(Guid.NewGuid().ToString(), 2, 2));
-                    World.Fleet.Add(new Pod(Guid.NewGuid().ToString(), 2, 2));
+                    Taxi newTaxi = new Taxi(Guid.NewGuid().ToString(), 2);
+                    _hubs[i].AddPod(newTaxi);
+                    World.Fleet.Add(newTaxi);
                 }
 
         }
