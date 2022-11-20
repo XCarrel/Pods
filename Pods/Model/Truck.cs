@@ -12,10 +12,13 @@ namespace Model
     /// </summary>
     public class Truck : Pod
     {
+        public static readonly int[] ALLOWED_CAPACITIES = { 2, 4, 8, 16 };
+
         List<Container> _containers;
 
         public Truck(string id, int capacity) : base(id, capacity)
         {
+            if (!ALLOWED_CAPACITIES.Contains(capacity)) throw new Exception($"Invalid container capacity ({capacity})");
             _containers = new List<Container>();
         }
 

@@ -37,7 +37,28 @@ namespace PodTests
 
         [TestMethod]
         public void ValidContainerCapacityTest()
-        { }
+        {
+            // Act: build one taxi for each capacity
+            foreach (int capa in Truck.ALLOWED_CAPACITIES)
+            {
+                Truck truck = new Truck("xxx", capa);
+                Assert.IsNotNull(truck);
+            }
+            // Act: try to build taxies with invalid capacities
+            bool noBadBuild = true;
+            for (int capa = 0; capa < 30; capa++)
+                if (!Truck.ALLOWED_CAPACITIES.Contains(capa))
+                    try
+                    {
+                        Truck truck = new Truck("xxx", capa);
+                        noBadBuild = false; // it's not OK to reach this line
+                    }
+                    catch (Exception e)
+                    {
+                        // Good!
+                    }
+            Assert.IsTrue(noBadBuild);
+        }
 
         [TestMethod]
         public void TruckLoadTest()
