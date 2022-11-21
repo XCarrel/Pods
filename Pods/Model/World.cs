@@ -27,6 +27,7 @@ namespace Model
         public static Random alea = new Random();
         public static readonly int WIDTH = 1500;
         public static readonly int HEIGHT = 800;
+        public static readonly int TAXI_RATIO = 90; // % of taxis in the whole fleet
 
         private static List<Person> _population = new List<Person>();
         private static List<Hub> _hubs = new List<Hub>();
@@ -297,9 +298,19 @@ namespace Model
             for (int i = 0; i < _hubs.Count; i++)
                 for (int p = 0; p < 50; p++)
                 {
-                    Taxi newTaxi = new Taxi(Guid.NewGuid().ToString(), 2);
-                    _hubs[i].AddPod(newTaxi);
-                    World.Fleet.Add(newTaxi);
+                    if (alea.Next(100) < TAXI_RATIO)
+                    {
+                        Taxi newTaxi = new Taxi(Guid.NewGuid().ToString(), 2);
+                        // Make it "rideable" right away
+                        newTaxi.addTraveller(new Person(Guid.NewGuid().ToString()));
+                        _hubs[i].AddPod(newTaxi);
+                        World.Fleet.Add(newTaxi);
+                    } else
+                    {
+                        Truck newTruck = new Truck(Guid.NewGuid().ToString(), 2);
+                        _hubs[i].AddPod(newTruck);
+                        World.Fleet.Add(newTruck);
+                    }
                 }
 
         }

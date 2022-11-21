@@ -47,12 +47,12 @@ namespace Pods
             if (World.alea.Next(30) == 0)
             {
                 Hub source = World.Hubs[World.alea.Next(World.Hubs.Count)];
-                Pod pod = source.CheckoutRandomPod();
+                Pod? pod = source.CheckoutRandomPod();
                 if (pod != null)
                 {
                     pod.Speed = World.alea.Next(100, 300);
                     source.GetAnExitRoad().AllowEnter(pod);
-                    Console.WriteLine($"Pod {pod.Id} leaves {source.Name}");
+                    Console.WriteLine($"{pod.GetType().ToString()} {pod.Id} leaves {source.Name}");
                 }
             }
         }
@@ -61,21 +61,22 @@ namespace Pods
             myBuffer.Graphics.Clear(Color.AliceBlue);
 
             // draw roads
-            Pen p = new Pen(new SolidBrush(Color.LightGray), 1);
-            Pen p2 = new Pen(new SolidBrush(Color.Red), 3);
+            Pen roadBrush = new Pen(new SolidBrush(Color.LightGray), 1);
+            Pen taxiBrush = new Pen(new SolidBrush(Color.Red), 3);
+            Pen truckBrush = new Pen(new SolidBrush(Color.DarkGray), 3);
             foreach (Road road in World.Roads)
             {
-                myBuffer.Graphics.DrawLine(p, road.EntryPoint.X, road.EntryPoint.Y, road.ExitPoint.X, road.ExitPoint.Y);
+                myBuffer.Graphics.DrawLine(roadBrush, road.EntryPoint.X, road.EntryPoint.Y, road.ExitPoint.X, road.ExitPoint.Y);
                 foreach (Pod pod in road.Pods)
-                    myBuffer.Graphics.DrawEllipse(p2, new Rectangle((int)pod.Position.X - 4, (int)pod.Position.Y - 2, 4, 4));
+                    myBuffer.Graphics.DrawEllipse((pod.GetType() == typeof(Taxi)) ? taxiBrush : truckBrush, new Rectangle((int)pod.Position.X - 4, (int)pod.Position.Y - 2, 4, 4));
             }
 
-            p = new Pen(new SolidBrush(Color.Blue), 8);
+            roadBrush = new Pen(new SolidBrush(Color.Blue), 8);
 
             // Draw hubs
             foreach (Hub hub in World.Hubs)
             {
-                myBuffer.Graphics.DrawEllipse(p, new Rectangle((int)hub.Position.X - Hub.DIAMETER / 2, (int)hub.Position.Y - Hub.DIAMETER / 2, Hub.DIAMETER, Hub.DIAMETER));
+                myBuffer.Graphics.DrawEllipse(roadBrush, new Rectangle((int)hub.Position.X - Hub.DIAMETER / 2, (int)hub.Position.Y - Hub.DIAMETER / 2, Hub.DIAMETER, Hub.DIAMETER));
                 if (chkShowHubStats.Checked)
                     myBuffer.Graphics.DrawString($"{hub.Name}\n{hub.Parking.Count} Pods", drawFont, writingBrush, hub.Position.X + Hub.DIAMETER, hub.Position.Y - Hub.DIAMETER);
             }
