@@ -15,10 +15,13 @@ namespace Model
         private Vector2 _position;
         private List<Person> _occupancy;
         private List<Pod> _parking;
+        private List<Container> _containers;
 
         public string Name { get => _name; set => _name = value; }
         public Vector2 Position { get => _position; set => _position = value; }
         public List<Pod> Parking { get => _parking; }
+        public List<Container> Containers { get => _containers; }
+        public List<Person> Occupancy { get => _occupancy; }
 
         public Hub(string name, Vector2 position)
         {
@@ -26,16 +29,22 @@ namespace Model
             _position = position;
             _occupancy = new List<Person>();
             _parking = new List<Pod>();
+            _containers = new List<Container>();
         }
 
         public void AddPerson(Person person)
         {
-            _occupancy.Add(person);
+            Occupancy.Add(person);
         }
 
         public void AddPod(Pod pod)
         {
             Parking.Add(pod);
+        }
+
+        public void AddContainer(Container container)
+        {
+            Containers.Add(container);
         }
 
         /// <summary>
@@ -63,5 +72,7 @@ namespace Model
             else
                 return candidates[World.alea.Next(candidates.Count)];
         }
+
+
     }
 }

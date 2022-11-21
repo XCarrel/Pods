@@ -20,7 +20,10 @@ namespace PodTests
             Itinerary test = World.FindItinerary(World.Hubs[0], World.Hubs[1], new List<Hub>());
 
             // Assert
-            Assert.AreEqual("A12",test.Roads[0].Name);
+            Assert.AreEqual("A12 Lausanne-Genève", test.Roads[0].Name);
+
+            // Arrange : destroy all roads
+            World.Roads.Clear();
 
             // Act
             test = World.FindItinerary(World.Hubs[1], World.Hubs[2], new List<Hub>());
