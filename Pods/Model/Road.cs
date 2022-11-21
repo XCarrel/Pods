@@ -29,6 +29,12 @@ namespace Model
 
         public bool AllowEnter(Pod pod)
         {
+            // Validate entry conditions
+            if (pod.GetType() == typeof(Taxi))
+            {
+                Taxi taxi = (Taxi)pod;
+                if (taxi.Travellers.Count < taxi.Capacity / 2.0) return false; // divide by float to deal withh odd capacities
+            }
             pod.Position = EntryPoint;
             Pods.Add(pod);
             return true; // unconditional entry (for now...)
