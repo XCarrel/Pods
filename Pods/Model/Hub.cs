@@ -7,26 +7,23 @@ using System.Threading.Tasks;
 
 namespace Model
 {
-    public class Hub
+    /// <summary>
+    /// A hub is a crossraod with infrastructures to host people, pods and containers
+    /// </summary>
+    public class Hub : CrossRoad
     {
-        static public readonly int DIAMETER = 20;
+        static public readonly new int DIAMETER = 20;
 
-        private string _name;
-        private Vector2 _position;
         private List<Person> _occupancy;
         private List<Pod> _parking;
         private List<Container> _containers;
 
-        public string Name { get => _name; set => _name = value; }
-        public Vector2 Position { get => _position; set => _position = value; }
         public List<Pod> Parking { get => _parking; }
         public List<Container> Containers { get => _containers; }
         public List<Person> Occupancy { get => _occupancy; }
 
-        public Hub(string name, Vector2 position)
+        public Hub(string name, Vector2 position) : base (name, position)
         {
-            _name = name;
-            _position = position;
             _occupancy = new List<Person>();
             _parking = new List<Pod>();
             _containers = new List<Container>();
