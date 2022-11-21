@@ -29,7 +29,7 @@ namespace Model
 
         public bool AllowEnter(Pod pod)
         {
-            pod.Position = Entry();
+            pod.Position = EntryPoint;
             Pods.Add(pod);
             return true; // unconditional entry (for now...)
         }
@@ -51,20 +51,24 @@ namespace Model
         /// The exact coordinates of the road entry point
         /// </summary>
         /// <returns></returns>
-        public Vector2 Entry()
+        public Vector2 EntryPoint
         {
-            Vector2 res = new Vector2(From.Position.X + Hub.DIAMETER/2 * PerpendicularDirection().X, From.Position.Y + Hub.DIAMETER/2 * PerpendicularDirection().Y);
-            return res;
+            get
+            {
+                return new Vector2(From.Position.X + Hub.DIAMETER / 2 * PerpendicularDirection().X, From.Position.Y + Hub.DIAMETER / 2 * PerpendicularDirection().Y);
+            }
         }
 
         /// <summary>
         /// The exact coordinates of the road exit point
         /// </summary>
         /// <returns></returns>
-        public Vector2 Exit()
+        public Vector2 ExitPoint
         {
-            Vector2 res = new Vector2(To.Position.X + Hub.DIAMETER / 2 * PerpendicularDirection().X, To.Position.Y + Hub.DIAMETER / 2 * PerpendicularDirection().Y);
-            return res;
+            get
+            {
+                return new Vector2(To.Position.X + Hub.DIAMETER / 2 * PerpendicularDirection().X, To.Position.Y + Hub.DIAMETER / 2 * PerpendicularDirection().Y);
+            }
         }
         
         /// <summary>
@@ -77,8 +81,8 @@ namespace Model
                 pod.Move(dt, _to.Position.X - _from.Position.X, _to.Position.Y - _from.Position.Y);
 
             // Manage road exits
-            Vector2 exit = Exit(); // avoid repeated computations
-            Vector2 entry = Entry();
+            Vector2 exit = ExitPoint; // avoid repeated computations
+            Vector2 entry = EntryPoint;
             // TODO Make entry and exit attributes, computed at creation once and for all
 
             foreach (Pod pod in Pods.ToList())

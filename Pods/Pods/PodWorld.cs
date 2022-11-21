@@ -65,7 +65,7 @@ namespace Pods
             Pen p2 = new Pen(new SolidBrush(Color.Red), 3);
             foreach (Road road in World.Roads)
             {
-                myBuffer.Graphics.DrawLine(p, road.Entry().X, road.Entry().Y, road.Exit().X, road.Exit().Y);
+                myBuffer.Graphics.DrawLine(p, road.EntryPoint.X, road.EntryPoint.Y, road.ExitPoint.X, road.ExitPoint.Y);
                 foreach (Pod pod in road.Pods)
                     myBuffer.Graphics.DrawEllipse(p2, new Rectangle((int)pod.Position.X - 4, (int)pod.Position.Y - 2, 4, 4));
             }
