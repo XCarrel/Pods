@@ -56,20 +56,5 @@ namespace Model
             return pod;
         }
 
-        /// <summary>
-        /// Selects randomly a road that exits this hub
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public Road GetAnExitRoad()
-        {
-            List<Road> candidates = World.Roads.Where(r => r.From == this).ToList();
-            if (candidates.Count == 0)
-                throw new Exception($"Hub {Name} is a deadend");
-            else
-                return candidates[World.alea.Next(candidates.Count)];
-        }
-
-
     }
 }

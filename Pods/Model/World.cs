@@ -30,18 +30,18 @@ namespace Model
         public static readonly int TAXI_RATIO = 90; // % of taxis in the whole fleet
 
         private static List<Person> _population = new List<Person>();
-        private static List<Hub> _hubs = new List<Hub>();
+        private static List<CrossRoad> _crossroads = new List<CrossRoad>();
         private static List<Road> _roads = new List<Road>();
         private static List<Pod> _fleet = new List<Pod>();
 
         public static List<Person> Population { get => _population; set => _population = value; }
-        public static List<Hub> Hubs { get => _hubs; set => _hubs = value; }
+        public static List<CrossRoad> CrossRoads { get => _crossroads; set => _crossroads = value; }
         public static List<Road> Roads { get => _roads; set => _roads = value; }
         public static List<Pod> Fleet { get => _fleet; set => _fleet = value; }
 
         public static void Init()
         {
-            _hubs = new List<Hub>
+            _crossroads = new List<CrossRoad>
                  {
                  new Hub ("Lausanne", new Vector2(5 * 35 + 50, HEIGHT - 5 * 35 - 50)),
                  new Hub ("Genève", new Vector2(5 * 0 + 50, HEIGHT -5 * 0 - 50)),
@@ -51,7 +51,7 @@ namespace Model
                  new Hub ("Lucerne", new Vector2(5 * 160 + 50, HEIGHT - 5 * 90 - 50)),
                  new Hub ("Coire", new Vector2(5 * 260 + 50, HEIGHT - 5 * 70 - 50)),
                  new Hub ("Lugano", new Vector2(5 * 215 + 50, HEIGHT - 5 * 0 - 50)),
-                 new Hub ("Interlaken", new Vector2(5 * 130 + 50, HEIGHT - 5 * 50 - 50)),
+                 new CrossRoad ("Interlaken", new Vector2(5 * 130 + 50, HEIGHT - 5 * 50 - 50)),
                  };
 
             // Build roads
@@ -72,13 +72,22 @@ namespace Model
                 "A76 Coire-Lucerne",
                 "A78 Coire-Lugano",
                 "A86 Lugano-Lucerne",
-                "A93 Interlaken-Berne"
+                "A93 Interlaken-Berne",
+                "A91 Interlaken-Lausanne",
+                "A94 Interlaken-Sion",
+                "A98 Interlaken-Lugano",
+                "A96 Interlaken-Lucerne",
+                "A39 Berne-Interlaken",
+                "A19 Lausanne-Interlaken",
+                "A49 Sion-Interlaken",
+                "A89 Lugano-Interlaken",
+                "A69 Lucerne-Interlaken",
             };
             _roads = new List<Road>();
             // Create roads based on name: second digit is the index of the starting hub, third of the ending one
             foreach (string roadName in roadNames)
             {
-                Roads.Add(new Road(roadName, _hubs[(int)(roadName[1] - '0') - 1], _hubs[(int)(roadName[2] - '0') - 1]));
+                Roads.Add(new Road(roadName, _crossroads[(int)(roadName[1] - '0') - 1], _crossroads[(int)(roadName[2] - '0') - 1]));
             }
 
             // generate population
@@ -291,27 +300,31 @@ namespace Model
             }
 
             // put people in hubs
-            int peopleByHub = _population.Count / _hubs.Count;
-            for (int i = 0; i < _hubs.Count; i++)
-                for (int p = 0; p < peopleByHub; p++)
-                    _hubs[i].AddPerson(_population[peopleByHub * i + p]);
+            int peopleByHub = _population.Count / _crossroads.Count;
 
             // Fill hubs' parkings
-            for (int i = 0; i < _hubs.Count; i++)
-                for (int p = 0; p < 50; p++)
+            for (int i = 0; i < _crossroads.Count; i++)
+                if (_crossroads[i].GetType() == typeof(Hub))
                 {
-                    if (alea.Next(100) < TAXI_RATIO)
+                    Hub hub = (Hub)_crossroads[i];
+                    for (int p = 0; p < peopleByHub; p++)
+                        hub.AddPerson(_population[peopleByHub * i + p]);
+                    for (int p = 0; p < 50; p++)
                     {
-                        Taxi newTaxi = new Taxi(Guid.NewGuid().ToString(), 2);
-                        // Make it "rideable" right away
-                        newTaxi.addTraveller(new Person(Guid.NewGuid().ToString()));
-                        _hubs[i].AddPod(newTaxi);
-                        World.Fleet.Add(newTaxi);
-                    } else
-                    {
-                        Truck newTruck = new Truck(Guid.NewGuid().ToString(), 2);
-                        _hubs[i].AddPod(newTruck);
-                        World.Fleet.Add(newTruck);
+                        if (alea.Next(100) < TAXI_RATIO)
+                        {
+                            Taxi newTaxi = new Taxi(Guid.NewGuid().ToString(), 2);
+                            // Make it "rideable" right away
+                            newTaxi.addTraveller(new Person(Guid.NewGuid().ToString()));
+                            hub.AddPod(newTaxi);
+                            World.Fleet.Add(newTaxi);
+                        }
+                        else
+                        {
+                            Truck newTruck = new Truck(Guid.NewGuid().ToString(), 2);
+                            hub.AddPod(newTruck);
+                            World.Fleet.Add(newTruck);
+                        }
                     }
                 }
 
@@ -325,7 +338,7 @@ namespace Model
         /// <param name="To">The Hub where we want to go</param>
         /// <param name="PassedThrough">A list of hubs through which the search has already passed - and must therefore no pass again (would create an endless loop)</param>
         /// <returns>A List of roads to follow to get from start to finish</returns>
-        public static Itinerary FindItinerary(Hub From, Hub To, List<Hub> PassedThrough)
+        public static Itinerary FindItinerary(CrossRoad From, CrossRoad To, List<CrossRoad> PassedThrough)
         {
             PassedThrough.Add(From);
             Itinerary res = new Itinerary();

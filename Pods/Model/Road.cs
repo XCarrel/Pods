@@ -10,11 +10,11 @@ namespace Model
     public class Road
     {
         private string _name;
-        private Hub _from;
-        private Hub _to;
+        private CrossRoad _from;
+        private CrossRoad _to;
         private List<Pod> _pods;
 
-        public Road(string name, Hub from, Hub to)
+        public Road(string name, CrossRoad from, CrossRoad to)
         {
             _name = name;
             _from = from;
@@ -23,8 +23,8 @@ namespace Model
         }
 
         public string Name { get => _name; }
-        public Hub From { get => _from; }
-        public Hub To { get => _to; }
+        public CrossRoad From { get => _from; }
+        public CrossRoad To { get => _to; }
         public List<Pod> Pods { get => _pods; }
 
         public bool AllowEnter(Pod pod)
@@ -61,7 +61,8 @@ namespace Model
         {
             get
             {
-                return new Vector2(From.Position.X + Hub.DIAMETER / 2 * PerpendicularDirection().X, From.Position.Y + Hub.DIAMETER / 2 * PerpendicularDirection().Y);
+                int diameter = (From.GetType() == typeof(Hub)) ? Hub.DIAMETER : CrossRoad.DIAMETER;
+                return new Vector2(From.Position.X + diameter / 2 * PerpendicularDirection().X, From.Position.Y + diameter / 2 * PerpendicularDirection().Y);
             }
         }
 
@@ -73,7 +74,8 @@ namespace Model
         {
             get
             {
-                return new Vector2(To.Position.X + Hub.DIAMETER / 2 * PerpendicularDirection().X, To.Position.Y + Hub.DIAMETER / 2 * PerpendicularDirection().Y);
+                int diameter = (From.GetType() == typeof(Hub)) ? Hub.DIAMETER : CrossRoad.DIAMETER;
+                return new Vector2(To.Position.X + diameter / 2 * PerpendicularDirection().X, To.Position.Y + diameter / 2 * PerpendicularDirection().Y);
             }
         }
         
@@ -92,9 +94,15 @@ namespace Model
             // TODO Make entry and exit attributes, computed at creation once and for all
 
             foreach (Pod pod in Pods.ToList())
-                if (Math.Abs(pod.Position.X-entry.X) >= Math.Abs(exit.X - entry.X))
+                if (Math.Abs(pod.Position.X-entry.X) >= Math.Abs(exit.X - entry.X)) // end of road
                 {
-                    To.AddPod(pod); // park the pod at its destination
+                    if (To.GetType() == typeof(Hub))
+                    {
+                        ((Hub)To).AddPod(pod); // park the pod at its destination
+                    } else
+                    {
+                        To.GetAnExitRoad().AllowEnter(pod); // continue on another road
+                    }
                     Pods.Remove(pod);
                 }
         }
