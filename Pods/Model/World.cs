@@ -51,6 +51,7 @@ namespace Model
                  new Hub ("Lucerne", new Vector2(5 * 160 + 50, HEIGHT - 5 * 90 - 50)),
                  new Hub ("Coire", new Vector2(5 * 260 + 50, HEIGHT - 5 * 70 - 50)),
                  new Hub ("Lugano", new Vector2(5 * 215 + 50, HEIGHT - 5 * 0 - 50)),
+                 new Hub ("Interlaken", new Vector2(5 * 130 + 50, HEIGHT - 5 * 50 - 50)),
                  };
 
             // Build roads
@@ -70,7 +71,8 @@ namespace Model
                 "A67 Lucerne-Coire",
                 "A76 Coire-Lucerne",
                 "A78 Coire-Lugano",
-                "A86 Lugano-Lucerne"
+                "A86 Lugano-Lucerne",
+                "A93 Interlaken-Berne"
             };
             _roads = new List<Road>();
             // Create roads based on name: second digit is the index of the starting hub, third of the ending one
